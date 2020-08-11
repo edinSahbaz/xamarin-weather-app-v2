@@ -1,6 +1,5 @@
-﻿using System;
+﻿using WeatherApp.Views;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace WeatherApp
 {
