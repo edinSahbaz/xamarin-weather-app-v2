@@ -4,6 +4,7 @@
     {
         public MainPageViewModel()
         {
+            ApiHelper.InitializeClient();
         }
 
         public string Title
