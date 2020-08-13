@@ -11,6 +11,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Fonts\PoppinsBold.ttf" />
+    <None Remove="Resources\Fonts\PoppinsLight.ttf" />
+    <None Remove="Resources\Fonts\PoppinsMedium.ttf" />
+    <None Remove="Resources\Fonts\PoppinsRegular.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Fonts\PoppinsBold.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\PoppinsLight.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\PoppinsMedium.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\PoppinsRegular.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1269" />
