@@ -19,29 +19,36 @@ namespace WeatherApp.ViewModels
         private string _sunset;
         private string _searchInput;
         #endregion
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public MainPageViewModel()
         {
             ApiHelper.InitializeClient();
 
-            LoadInitialData();
+            LoadByCurrentLocation();
 
             LoadSearched = new Command(async () =>
             {
-                weather = await WeatherDataProcessor.LoadCurrentWeatherByCityName(searchInput);
+                currentWeather = await WeatherDataProcessor.LoadCurrentWeatherByCityName(searchInput);
                 PopulateElements();
             });
+
+            LoadCurrentLocation = new Command(() =>
+           {
+               LoadByCurrentLocation();
+           });
         }
 
-        public WeatherModel.RootObject weather { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+        public WeatherModel.RootObject currentWeather { get; set; }
 
+        #region Bindable properties
         public string Title
         {
             get => "Weather Forecast";
         }
 
         public ICommand LoadSearched { get; set; }
+        public ICommand LoadCurrentLocation { get; set; }
 
         public string temperature
         {
@@ -126,26 +133,27 @@ namespace WeatherApp.ViewModels
                 PropertyChanged?.Invoke(this, args);
             }
         }
+        #endregion
 
-        async void LoadInitialData()
+        async void LoadByCurrentLocation()
         {
             var coordinates = await GeoCoordinatesProcessor.LoadCoordinates();
-            weather = await WeatherDataProcessor.LoadCurrentWeatherByCoordinates(coordinates.Longitude, coordinates.Latitude);
+            currentWeather = await WeatherDataProcessor.LoadCurrentWeatherByCoordinates(coordinates.Longitude, coordinates.Latitude);
 
             PopulateElements();
         }
 
         void PopulateElements()
         {
-            imageSource = "https://openweathermap.org/img/wn/" + weather.weather.First().icon + "@2x.png";
+            imageSource = "https://openweathermap.org/img/wn/" + currentWeather.weather.First().icon + "@2x.png";
             date = getCorrectDateFormat(DateTime.Now);
 
 
-            temperature = Math.Round(weather.main.temp).ToString();
-            city = $"{weather.name}, {weather.sys.country}";
+            temperature = Math.Round(currentWeather.main.temp).ToString();
+            city = $"{currentWeather.name}, {currentWeather.sys.country}";
 
-            feelsLike = "Feels like " + Math.Round(weather.main.feels_like).ToString();
-            sunset = "Sunset " + ConvertUnixTimestampToTime(weather.sys.sunset);
+            feelsLike = "Feels like " + Math.Round(currentWeather.main.feels_like).ToString();
+            sunset = "Sunset " + ConvertUnixTimestampToTime(currentWeather.sys.sunset);
         }
 
         static string ConvertUnixTimestampToTime(long unixTimeStamp)
