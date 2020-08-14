@@ -8,10 +8,10 @@ namespace WeatherApp
 {
     public class WeatherDataProcessor
     {
-        public static async Task<WeatherModel.RootObject> LoadCurrentWeather(string city)
-        {
-            string url = $"weather?q={city}&appid={Credentials.apiKey}";
+        static string units = "metric"; //TEMP
 
+        static async Task<WeatherModel.RootObject> LoadCurrentWeather(string url)
+        {
             using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
             {
                 if (response.IsSuccessStatusCode)
@@ -24,6 +24,22 @@ namespace WeatherApp
                     throw new Exception(response.ReasonPhrase);
                 }
             }
+        }
+
+        public static async Task<WeatherModel.RootObject> LoadCurrentWeatherByCityName(string city)
+        {
+            string url = $"weather?q={city}&units={units}&appid={Credentials.apiKey}";
+
+            var data = await LoadCurrentWeather(url);
+            return data;
+        }
+
+        public static async Task<WeatherModel.RootObject> LoadCurrentWeatherByCoordinates(double lon, double lat)
+        {
+            string url = $"weather?lat={lat}&lon={lon}&units={units}&appid={Credentials.apiKey}";
+
+            var data = await LoadCurrentWeather(url);
+            return data;
         }
     }
 }
