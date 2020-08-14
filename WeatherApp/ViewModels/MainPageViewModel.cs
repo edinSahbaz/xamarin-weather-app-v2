@@ -9,7 +9,7 @@
 
         public string Title
         {
-            get => "Weather Forecast App";
+            get => "Weather Forecast";
         }
     }
 }

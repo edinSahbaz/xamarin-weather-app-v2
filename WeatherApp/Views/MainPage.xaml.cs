@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using WeatherApp.ViewModels;
+using Xamarin.Forms;
 
 namespace WeatherApp.Views
 {
@@ -6,6 +7,8 @@ namespace WeatherApp.Views
     {
         public MainPage()
         {
+            BindingContext = new MainPageViewModel();
+
             InitializeComponent();
         }
     }
