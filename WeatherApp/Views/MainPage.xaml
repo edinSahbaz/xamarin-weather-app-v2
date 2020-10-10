@@ -8,7 +8,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="5*"/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Height="4*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -54,7 +54,73 @@
         </StackLayout>
 
         <!-- HOURLY INFO -->
-        <StackLayout Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
+        <StackLayout Orientation="Vertical" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="10, 0, 10, 0">
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Padding="0, 0, 0, 30">
+                <Label Text="Today" FontSize="16" FontFamily="FontMedium"/>
+                <Label Text="Tomorrow" FontSize="16" FontFamily="FontMedium" Margin="24, 0"/>
+                <Label Text="Next 7 Days >" FontSize="16" FontFamily="FontMedium" TextColor="#4998EB"/>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal" Spacing="7">
+                <Frame Background="#1E1E45" CornerRadius="40" BorderColor="#2A2C53" Padding="16, 20">
+                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                        <Label Text="12AM" HorizontalTextAlignment="Center" FontFamily="FontLight" FontSize="16"/>
+
+                        <Frame BackgroundColor="#1A1A42" CornerRadius="40" Padding="4">
+                            <Image Source="test" WidthRequest="40" />
+                        </Frame>
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                            <Label Text="26" HorizontalTextAlignment="Center" FontSize="18" FontFamily="FontMedium"/>
+                            <Label Text="°C" HorizontalTextAlignment="Center" FontSize="12" Margin="-5, 2, 0, 0" FontFamily="FontLight"/>
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+
+                <Frame Background="#1E1E45" CornerRadius="40" BorderColor="#2A2C53" Padding="16, 20">
+                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                        <Label Text="12AM" HorizontalTextAlignment="Center" FontFamily="FontLight" FontSize="16"/>
+
+                        <Frame BackgroundColor="#1A1A42" CornerRadius="40" Padding="4">
+                            <Image Source="test" WidthRequest="40" />
+                        </Frame>
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                            <Label Text="26" HorizontalTextAlignment="Center" FontSize="18" FontFamily="FontMedium"/>
+                            <Label Text="°C" HorizontalTextAlignment="Center" FontSize="12" Margin="-5, 2, 0, 0" FontFamily="FontLight"/>
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+                <Frame Background="#1E1E45" CornerRadius="40" BorderColor="#2A2C53" Padding="16, 20">
+                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                        <Label Text="12AM" HorizontalTextAlignment="Center" FontFamily="FontLight" FontSize="16"/>
+
+                        <Frame BackgroundColor="#1A1A42" CornerRadius="40" Padding="4">
+                            <Image Source="test" WidthRequest="40" />
+                        </Frame>
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                            <Label Text="26" HorizontalTextAlignment="Center" FontSize="18" FontFamily="FontMedium"/>
+                            <Label Text="°C" HorizontalTextAlignment="Center" FontSize="12" Margin="-5, 2, 0, 0" FontFamily="FontLight"/>
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+                <Frame Background="#1E1E45" CornerRadius="40" BorderColor="#2A2C53" Padding="16, 20">
+                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                        <Label Text="12AM" HorizontalTextAlignment="Center" FontFamily="FontLight" FontSize="16"/>
+
+                        <Frame BackgroundColor="#1A1A42" CornerRadius="40" Padding="4">
+                            <Image Source="test" WidthRequest="40" />
+                        </Frame>
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                            <Label Text="26" HorizontalTextAlignment="Center" FontSize="18" FontFamily="FontMedium"/>
+                            <Label Text="°C" HorizontalTextAlignment="Center" FontSize="12" Margin="-5, 2, 0, 0" FontFamily="FontLight"/>
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
         </StackLayout>
 
         <!-- SEARCH BAR -->
