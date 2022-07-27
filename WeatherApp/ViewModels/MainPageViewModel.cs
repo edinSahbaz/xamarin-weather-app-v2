@@ -24,10 +24,12 @@ namespace WeatherApp.ViewModels
         private string _feelsLike;
         private string _sunset;
         private string _searchInput;
+        private bool _loaded;
         #endregion
 
         public MainPageViewModel()
         {
+            loaded = false;
             dailyWeather = new ObservableCollection<DisplayDailyWeatherModel>();
 
             ApiHelper.InitializeClient();
@@ -42,17 +44,31 @@ namespace WeatherApp.ViewModels
 
         public ICommand LoadSearched => new Command(async () =>
         {
-            currentWeather = await WeatherDataProcessor.LoadWeatherByCityName(searchInput);
+            try
+            {
+                currentWeather = await WeatherDataProcessor.LoadWeatherByCityName(searchInput);
 
-            var data = await WeatherDataProcessor.LoadDailyByCityName(searchInput);
+                var data = await WeatherDataProcessor.LoadDailyByCityName(searchInput);
 
-            PopulateDailyWeatherList(data);
-            PopulateElements();
+                PopulateDailyWeatherList(data);
+                PopulateElements();
+            }
+            catch (Exception e)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", e.Message, "OK");
+            }
         });
 
-        public ICommand LoadCurrentLocation => new Command(() =>
+        public ICommand LoadCurrentLocation => new Command(async () =>
         {
-            LoadByCurrentLocation();
+            try
+            {
+                LoadByCurrentLocation();
+            }
+            catch (Exception e)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", e.Message, "OK");
+            }
         });
 
         public string temperature
@@ -138,16 +154,33 @@ namespace WeatherApp.ViewModels
                 PropertyChanged?.Invoke(this, args);
             }
         }
+
+        public bool loaded
+        {
+            get { return _loaded; }
+            set
+            {
+                _loaded = value;
+
+                var args = new PropertyChangedEventArgs(nameof(loaded));
+                PropertyChanged?.Invoke(this, args);
+            }
+        }
         #endregion
 
         async void LoadByCurrentLocation()
         {
+            loaded = false;
+
             var coordinates = await GeoCoordinatesProcessor.LoadCoordinates();
+
             currentWeather = await WeatherDataProcessor.LoadWeatherByCoordinates(coordinates.Longitude, coordinates.Latitude);
             var dailyForecast = await WeatherDataProcessor.LoadDailyByCoordinates(coordinates.Longitude, coordinates.Latitude);
 
             PopulateElements();
             PopulateDailyWeatherList(dailyForecast);
+            
+            loaded = true;
         }
 
         void PopulateElements()
@@ -168,9 +201,11 @@ namespace WeatherApp.ViewModels
             foreach (var hour in data.list)
             {
                 var time = ConvertUnixTimestampToTime(hour.dt) + "0";
+                var dayAndDate = getCorrectDateFormat(DateTime.Parse(hour.dt_txt));
                 var iconSource = "https://openweathermap.org/img/wn/" + hour.weather.First().icon + "@2x.png";
                 var temp = Math.Round(hour.main.temp).ToString();
-                dailyWeather.Add(new DisplayDailyWeatherModel { time = time, icon = iconSource, temperature = temp });
+
+                dailyWeather.Add(new DisplayDailyWeatherModel { time = time, date = dayAndDate, icon = iconSource, temperature = temp });
             }
         }
         
@@ -184,7 +219,7 @@ namespace WeatherApp.ViewModels
 
         static string getCorrectDateFormat(DateTime date)
         {
-            var dayName = DateTime.Now.ToString("ddd");
+            var dayName = date.ToString("ddd");
             var dayNumber = date.Day;
             var month = date.ToString("MMM", CultureInfo.InvariantCulture);
 

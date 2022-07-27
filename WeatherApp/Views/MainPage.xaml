@@ -1,8 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:WeatherApp"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:local="clr-namespace:WeatherApp"
              BackgroundColor="#10103A"
              x:Class="WeatherApp.Views.MainPage">
+
 
     <Grid>
         <Grid.RowDefinitions>
@@ -26,10 +28,14 @@
                    VerticalTextAlignment="Center" HorizontalTextAlignment="Center" 
                    Text="{Binding Title}" FontSize="20" FontFamily="FontMedium"/>
         <ImageButton Grid.Row="0" Grid.Column="2" Source="@drawable/location_icon" BackgroundColor="Transparent" Padding="0, 22, 0, 28" Command="{Binding LoadCurrentLocation}"/>
-
+        
+        <FlexLayout Grid.Column="1" Grid.Row="1" AlignItems="Center" JustifyContent="End" Direction="Column" IsVisible="{Binding loaded}">
+            <ActivityIndicator IsRunning="true" Color="#fff" Scale="2" Margin="0, 0, 0, 40"/>
+            <Label Text="Loading..." FontFamily="FontMedium" FontSize="20"/>
+        </FlexLayout>
 
         <!-- MAIN INFO -->
-        <StackLayout Grid.Row="1" Grid.Column="1">
+        <StackLayout Grid.Row="1" Grid.Column="1" IsVisible="{Binding loaded}">
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                 <Image Source="{Binding imageSource}" WidthRequest="60"/>
 
@@ -54,7 +60,7 @@
         </StackLayout>
 
         <!-- HOURLY INFO -->
-        <StackLayout Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3">
+        <StackLayout Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" IsVisible="{Binding loaded}">
             <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Padding="0, 0, 0, 30">
                 <Label Text="Today" FontSize="16" FontFamily="FontMedium"/>
                 <Label Text="Tomorrow" FontSize="16" FontFamily="FontMedium" Margin="24, 0"/>
@@ -65,11 +71,12 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <FlexLayout>
-                            <Frame Background="#1E1E45" CornerRadius="40" BorderColor="#2A2C53" WidthRequest="50" HeightRequest="180" Margin="8">
+                            <Frame Background="#1E1E45" CornerRadius="40" BorderColor="#2A2C53" WidthRequest="60" HeightRequest="200" Margin="8">
                                 <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
                                     <Label Text="{Binding time}" HorizontalTextAlignment="Center" FontFamily="FontLight" FontSize="16"/>
+                                    <Label Text="{Binding date}" HorizontalTextAlignment="Center" Margin="0, -10, 0, 0" FontFamily="FontLight" FontSize="10"/>
 
-                                    <Frame BackgroundColor="#1A1A42" CornerRadius="40" Padding="4">
+                                    <Frame BackgroundColor="#1A1A42" CornerRadius="40" Padding="8" Margin="0, 8">
                                         <Image Source="{Binding icon}" WidthRequest="40" />
                                     </Frame>
 

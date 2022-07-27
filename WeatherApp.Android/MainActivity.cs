@@ -52,8 +52,7 @@ namespace WeatherApp.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
 
-            if (Android.OS.Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
-
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
             {
                 Window.SetStatusBarColor(Android.Graphics.Color.Rgb(16, 16, 58));
             }
