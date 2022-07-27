@@ -44,12 +44,12 @@ namespace WeatherApp.ViewModels
 
                 var data = await WeatherEndpoints.LoadDailyByCityName(searchInput);
 
-                PopulateDailyWeatherList(data);
                 PopulateElements();
+                PopulateDailyWeatherList(data);
             }
             catch (Exception e)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", e.Message, "OK");
+                await Application.Current.MainPage.DisplayAlert("An error has occured!", e.Message, "OK");
             }
         });
 
@@ -192,7 +192,7 @@ namespace WeatherApp.ViewModels
             sunset = "Sunset " + ConvertUnixTimestampToTime(CurrentWeather.sys.sunset);
         }
 
-        void PopulateDailyWeatherList(HourlyWeatherModel.RootObject data)
+        void PopulateHourlyWeatherList(HourlyWeatherModel.RootObject data)
         {
             HourlyWeather.Clear();
             foreach (var hour in data.list)
