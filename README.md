@@ -5,11 +5,13 @@
 • Geolocation API and Openweather API Data Fetch </br>
 • MVVM Arhitecture </br>
 • Current weather UI component </br>
+• Daily/3-hour weather UI component </br>
 • Basic Splash screen </br>
 • Some other logic behind
 
 ## TODO:
-• Daily weather UI component </br>
+• Area pollution display </br>
+• Separate daily weather display for the following week </br>
 • Some other tweaks and adjustments
 
 ## App current UI:
