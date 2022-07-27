@@ -2,9 +2,15 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:local="clr-namespace:WeatherApp"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              BackgroundColor="#10103A"
              x:Class="WeatherApp.Views.MainPage">
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -28,8 +34,8 @@
                    VerticalTextAlignment="Center" HorizontalTextAlignment="Center" 
                    Text="{Binding Title}" FontSize="20" FontFamily="FontMedium"/>
         <ImageButton Grid.Row="0" Grid.Column="2" Source="@drawable/location_icon" BackgroundColor="Transparent" Padding="0, 22, 0, 28" Command="{Binding LoadCurrentLocation}"/>
-        
-        <FlexLayout Grid.Column="1" Grid.Row="1" AlignItems="Center" JustifyContent="End" Direction="Column" IsVisible="{Binding loaded}">
+
+        <FlexLayout Grid.Column="1" Grid.Row="1" AlignItems="Center" JustifyContent="End" Direction="Column" IsVisible="{Binding loaded, Converter={StaticResource InvertedBoolConverter}}">
             <ActivityIndicator IsRunning="true" Color="#fff" Scale="2" Margin="0, 0, 0, 40"/>
             <Label Text="Loading..." FontFamily="FontMedium" FontSize="20"/>
         </FlexLayout>
