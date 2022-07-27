@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -10,6 +12,10 @@ namespace WeatherApp.ViewModels
 {
     public class MainPageViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        public WeatherModel.RootObject currentWeather { get; set; }
+        public ObservableCollection<DisplayDailyWeatherModel> dailyWeather { get; set; }
+
         #region Private Fields
         private string _imageSource;
         private string _temperature;
@@ -22,24 +28,11 @@ namespace WeatherApp.ViewModels
 
         public MainPageViewModel()
         {
+            dailyWeather = new ObservableCollection<DisplayDailyWeatherModel>();
+
             ApiHelper.InitializeClient();
-
             LoadByCurrentLocation();
-
-            LoadSearched = new Command(async () =>
-            {
-                currentWeather = await WeatherDataProcessor.LoadCurrentWeatherByCityName(searchInput);
-                PopulateElements();
-            });
-
-            LoadCurrentLocation = new Command(() =>
-           {
-               LoadByCurrentLocation();
-           });
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public WeatherModel.RootObject currentWeather { get; set; }
 
         #region Bindable properties
         public string Title
@@ -47,8 +40,20 @@ namespace WeatherApp.ViewModels
             get => "Weather Forecast";
         }
 
-        public ICommand LoadSearched { get; set; }
-        public ICommand LoadCurrentLocation { get; set; }
+        public ICommand LoadSearched => new Command(async () =>
+        {
+            currentWeather = await WeatherDataProcessor.LoadWeatherByCityName(searchInput);
+
+            var data = await WeatherDataProcessor.LoadDailyByCityName(searchInput);
+
+            PopulateDailyWeatherList(data);
+            PopulateElements();
+        });
+
+        public ICommand LoadCurrentLocation => new Command(() =>
+        {
+            LoadByCurrentLocation();
+        });
 
         public string temperature
         {
@@ -138,16 +143,17 @@ namespace WeatherApp.ViewModels
         async void LoadByCurrentLocation()
         {
             var coordinates = await GeoCoordinatesProcessor.LoadCoordinates();
-            currentWeather = await WeatherDataProcessor.LoadCurrentWeatherByCoordinates(coordinates.Longitude, coordinates.Latitude);
+            currentWeather = await WeatherDataProcessor.LoadWeatherByCoordinates(coordinates.Longitude, coordinates.Latitude);
+            var dailyForecast = await WeatherDataProcessor.LoadDailyByCoordinates(coordinates.Longitude, coordinates.Latitude);
 
             PopulateElements();
+            PopulateDailyWeatherList(dailyForecast);
         }
 
         void PopulateElements()
         {
             imageSource = "https://openweathermap.org/img/wn/" + currentWeather.weather.First().icon + "@2x.png";
             date = getCorrectDateFormat(DateTime.Now);
-
 
             temperature = Math.Round(currentWeather.main.temp).ToString();
             city = $"{currentWeather.name}, {currentWeather.sys.country}";
@@ -156,6 +162,18 @@ namespace WeatherApp.ViewModels
             sunset = "Sunset " + ConvertUnixTimestampToTime(currentWeather.sys.sunset);
         }
 
+        void PopulateDailyWeatherList(DailyWeatherModel.RootObject data)
+        {
+            dailyWeather.Clear();
+            foreach (var hour in data.list)
+            {
+                var time = ConvertUnixTimestampToTime(hour.dt) + "0";
+                var iconSource = "https://openweathermap.org/img/wn/" + hour.weather.First().icon + "@2x.png";
+                var temp = Math.Round(hour.main.temp).ToString();
+                dailyWeather.Add(new DisplayDailyWeatherModel { time = time, icon = iconSource, temperature = temp });
+            }
+        }
+        
         static string ConvertUnixTimestampToTime(long unixTimeStamp)
         {
             var localDateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(unixTimeStamp)

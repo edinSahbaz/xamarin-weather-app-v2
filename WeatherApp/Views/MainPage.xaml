@@ -54,79 +54,41 @@
         </StackLayout>
 
         <!-- HOURLY INFO -->
-        <StackLayout Orientation="Vertical" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="10, 0, 10, 0">
-
+        <StackLayout Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3">
             <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Padding="0, 0, 0, 30">
                 <Label Text="Today" FontSize="16" FontFamily="FontMedium"/>
                 <Label Text="Tomorrow" FontSize="16" FontFamily="FontMedium" Margin="24, 0"/>
                 <Label Text="Next 7 Days >" FontSize="16" FontFamily="FontMedium" TextColor="#4998EB"/>
             </StackLayout>
 
-            <StackLayout Orientation="Horizontal" Spacing="7">
-                <Frame Background="#1E1E45" CornerRadius="40" BorderColor="#2A2C53" Padding="16, 20">
-                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                        <Label Text="12AM" HorizontalTextAlignment="Center" FontFamily="FontLight" FontSize="16"/>
+            <CollectionView ItemsSource="{Binding dailyWeather}" ItemsLayout="HorizontalList">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <FlexLayout>
+                            <Frame Background="#1E1E45" CornerRadius="40" BorderColor="#2A2C53" WidthRequest="50" HeightRequest="180" Margin="8">
+                                <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                                    <Label Text="{Binding time}" HorizontalTextAlignment="Center" FontFamily="FontLight" FontSize="16"/>
 
-                        <Frame BackgroundColor="#1A1A42" CornerRadius="40" Padding="4">
-                            <Image Source="test" WidthRequest="40" />
-                        </Frame>
+                                    <Frame BackgroundColor="#1A1A42" CornerRadius="40" Padding="4">
+                                        <Image Source="{Binding icon}" WidthRequest="40" />
+                                    </Frame>
 
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                            <Label Text="26" HorizontalTextAlignment="Center" FontSize="18" FontFamily="FontMedium"/>
-                            <Label Text="°C" HorizontalTextAlignment="Center" FontSize="12" Margin="-5, 2, 0, 0" FontFamily="FontLight"/>
-                        </StackLayout>
-                    </StackLayout>
-                </Frame>
-
-                <Frame Background="#1E1E45" CornerRadius="40" BorderColor="#2A2C53" Padding="16, 20">
-                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                        <Label Text="12AM" HorizontalTextAlignment="Center" FontFamily="FontLight" FontSize="16"/>
-
-                        <Frame BackgroundColor="#1A1A42" CornerRadius="40" Padding="4">
-                            <Image Source="test" WidthRequest="40" />
-                        </Frame>
-
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                            <Label Text="26" HorizontalTextAlignment="Center" FontSize="18" FontFamily="FontMedium"/>
-                            <Label Text="°C" HorizontalTextAlignment="Center" FontSize="12" Margin="-5, 2, 0, 0" FontFamily="FontLight"/>
-                        </StackLayout>
-                    </StackLayout>
-                </Frame>
-                <Frame Background="#1E1E45" CornerRadius="40" BorderColor="#2A2C53" Padding="16, 20">
-                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                        <Label Text="12AM" HorizontalTextAlignment="Center" FontFamily="FontLight" FontSize="16"/>
-
-                        <Frame BackgroundColor="#1A1A42" CornerRadius="40" Padding="4">
-                            <Image Source="test" WidthRequest="40" />
-                        </Frame>
-
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                            <Label Text="26" HorizontalTextAlignment="Center" FontSize="18" FontFamily="FontMedium"/>
-                            <Label Text="°C" HorizontalTextAlignment="Center" FontSize="12" Margin="-5, 2, 0, 0" FontFamily="FontLight"/>
-                        </StackLayout>
-                    </StackLayout>
-                </Frame>
-                <Frame Background="#1E1E45" CornerRadius="40" BorderColor="#2A2C53" Padding="16, 20">
-                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                        <Label Text="12AM" HorizontalTextAlignment="Center" FontFamily="FontLight" FontSize="16"/>
-
-                        <Frame BackgroundColor="#1A1A42" CornerRadius="40" Padding="4">
-                            <Image Source="test" WidthRequest="40" />
-                        </Frame>
-
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                            <Label Text="26" HorizontalTextAlignment="Center" FontSize="18" FontFamily="FontMedium"/>
-                            <Label Text="°C" HorizontalTextAlignment="Center" FontSize="12" Margin="-5, 2, 0, 0" FontFamily="FontLight"/>
-                        </StackLayout>
-                    </StackLayout>
-                </Frame>
-            </StackLayout>
+                                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                                        <Label Text="{Binding temperature}" HorizontalTextAlignment="Center" FontSize="18" FontFamily="FontMedium"/>
+                                        <Label Text="°C" HorizontalTextAlignment="Center" FontSize="12" Margin="-5, 2, 0, 0" FontFamily="FontLight"/>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
+                        </FlexLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </StackLayout>
 
         <!-- SEARCH BAR -->
-        <StackLayout Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal">
-            <SearchBar Text="{Binding searchInput}" SearchCommand="{Binding LoadSearched}" />
-        </StackLayout>
+        <FlexLayout AlignItems="Center" JustifyContent="Center" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
+            <SearchBar Text="{Binding searchInput}" SearchCommand="{Binding LoadSearched}" Placeholder="Find Location" WidthRequest="360"/>
+        </FlexLayout>
     </Grid>
 
 </ContentPage>
