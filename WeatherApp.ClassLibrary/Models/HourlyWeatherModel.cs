@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace WeatherApp.Models
+namespace WeatherApp.ClassLibrary.Models
 {
-    public class DailyWeatherModel
+    public class HourlyWeatherModel
     {
         public class Main
         {

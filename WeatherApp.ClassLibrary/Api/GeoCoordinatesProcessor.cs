@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 
-namespace WeatherApp
+namespace WeatherApp.ClassLibrary.Api
 {
     public static class GeoCoordinatesProcessor
     {

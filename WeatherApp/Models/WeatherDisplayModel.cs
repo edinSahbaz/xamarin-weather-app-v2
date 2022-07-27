@@ -1,6 +1,6 @@
 ﻿namespace WeatherApp.Models
 {
-    public class DisplayDailyWeatherModel
+    public class WeatherDisplayModel
     {
         public string time { get; set; }
         public string date { get; set; }

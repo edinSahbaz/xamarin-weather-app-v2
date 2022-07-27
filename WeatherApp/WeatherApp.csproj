@@ -33,8 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Views\WeeklyForecastView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
+    <ProjectReference Include="..\WeatherApp.ClassLibrary\WeatherApp.ClassLibrary.csproj" />
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 
-namespace WeatherApp
+namespace WeatherApp.ClassLibrary.Api
 {
     public static class ApiHelper
     {

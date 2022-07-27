@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using System.Windows.Input;
-using WeatherApp.Models;
-using Xamarin.Forms;
+﻿using WeatherApp.Models;
+using WeatherApp.ClassLibrary.Models;
+using WeatherApp.ClassLibrary.Api;
 
 namespace WeatherApp.ViewModels
 {
     public class MainPageViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public WeatherModel.RootObject currentWeather { get; set; }
-        public ObservableCollection<DisplayDailyWeatherModel> dailyWeather { get; set; }
+        static CurrentWeatherModel.RootObject CurrentWeather { get; set; }
+        public ObservableCollection<WeatherDisplayModel> HourlyWeather { get; set; }
 
         #region Private Fields
         private string _imageSource;
@@ -30,7 +24,7 @@ namespace WeatherApp.ViewModels
         public MainPageViewModel()
         {
             loaded = false;
-            dailyWeather = new ObservableCollection<DisplayDailyWeatherModel>();
+            HourlyWeather = new ObservableCollection<WeatherDisplayModel>();
 
             ApiHelper.InitializeClient();
             LoadByCurrentLocation();
@@ -46,9 +40,9 @@ namespace WeatherApp.ViewModels
         {
             try
             {
-                currentWeather = await WeatherDataProcessor.LoadWeatherByCityName(searchInput);
+                CurrentWeather = await WeatherEndpoints.LoadWeatherByCityName(searchInput);
 
-                var data = await WeatherDataProcessor.LoadDailyByCityName(searchInput);
+                var data = await WeatherEndpoints.LoadDailyByCityName(searchInput);
 
                 PopulateDailyWeatherList(data);
                 PopulateElements();
@@ -67,7 +61,7 @@ namespace WeatherApp.ViewModels
             }
             catch (Exception e)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", e.Message, "OK");
+                await Application.Current.MainPage.DisplayAlert("An error has occured!", e.Message, "OK");
             }
         });
 
@@ -174,8 +168,11 @@ namespace WeatherApp.ViewModels
 
             var coordinates = await GeoCoordinatesProcessor.LoadCoordinates();
 
-            currentWeather = await WeatherDataProcessor.LoadWeatherByCoordinates(coordinates.Longitude, coordinates.Latitude);
-            var dailyForecast = await WeatherDataProcessor.LoadDailyByCoordinates(coordinates.Longitude, coordinates.Latitude);
+            var lat = coordinates.Latitude;
+            var lon = coordinates.Longitude;
+
+            CurrentWeather = await WeatherEndpoints.LoadWeatherByCoordinates(lon, lat);
+            var dailyForecast = await WeatherEndpoints.LoadDailyByCoordinates(lon, lat);
 
             PopulateElements();
             PopulateDailyWeatherList(dailyForecast);
@@ -185,19 +182,19 @@ namespace WeatherApp.ViewModels
 
         void PopulateElements()
         {
-            imageSource = "https://openweathermap.org/img/wn/" + currentWeather.weather.First().icon + "@2x.png";
+            imageSource = "https://openweathermap.org/img/wn/" + CurrentWeather.weather.First().icon + "@2x.png";
             date = getCorrectDateFormat(DateTime.Now);
 
-            temperature = Math.Round(currentWeather.main.temp).ToString();
-            city = $"{currentWeather.name}, {currentWeather.sys.country}";
+            temperature = Math.Round(CurrentWeather.main.temp).ToString();
+            city = $"{CurrentWeather.name}, {CurrentWeather.sys.country}";
 
-            feelsLike = "Feels like " + Math.Round(currentWeather.main.feels_like).ToString();
-            sunset = "Sunset " + ConvertUnixTimestampToTime(currentWeather.sys.sunset);
+            feelsLike = "Feels like " + Math.Round(CurrentWeather.main.feels_like).ToString();
+            sunset = "Sunset " + ConvertUnixTimestampToTime(CurrentWeather.sys.sunset);
         }
 
-        void PopulateDailyWeatherList(DailyWeatherModel.RootObject data)
+        void PopulateDailyWeatherList(HourlyWeatherModel.RootObject data)
         {
-            dailyWeather.Clear();
+            HourlyWeather.Clear();
             foreach (var hour in data.list)
             {
                 var time = ConvertUnixTimestampToTime(hour.dt) + "0";
@@ -205,7 +202,7 @@ namespace WeatherApp.ViewModels
                 var iconSource = "https://openweathermap.org/img/wn/" + hour.weather.First().icon + "@2x.png";
                 var temp = Math.Round(hour.main.temp).ToString();
 
-                dailyWeather.Add(new DisplayDailyWeatherModel { time = time, date = dayAndDate, icon = iconSource, temperature = temp });
+                HourlyWeather.Add(new WeatherDisplayModel { time = time, date = dayAndDate, icon = iconSource, temperature = temp });
             }
         }
         
