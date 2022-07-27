@@ -1,6 +1,13 @@
 ﻿using WeatherApp.Models;
 using WeatherApp.ClassLibrary.Models;
 using WeatherApp.ClassLibrary.Api;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
+using Xamarin.Forms;
+using System.Windows.Input;
+using System;
+using System.Globalization;
+using System.Linq;
 
 namespace WeatherApp.ViewModels
 {
@@ -45,7 +52,7 @@ namespace WeatherApp.ViewModels
                 var data = await WeatherEndpoints.LoadDailyByCityName(searchInput);
 
                 PopulateElements();
-                PopulateDailyWeatherList(data);
+                PopulateHourlyWeatherList(data);
             }
             catch (Exception e)
             {
@@ -175,7 +182,7 @@ namespace WeatherApp.ViewModels
             var dailyForecast = await WeatherEndpoints.LoadDailyByCoordinates(lon, lat);
 
             PopulateElements();
-            PopulateDailyWeatherList(dailyForecast);
+            PopulateHourlyWeatherList(dailyForecast);
             
             loaded = true;
         }
