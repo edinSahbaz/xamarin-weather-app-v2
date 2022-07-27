@@ -6,7 +6,7 @@
 • MVVM Arhitecture </br>
 • Current weather UI component </br>
 • Daily/3-hour weather UI component </br>
-• Basic Splash screen </br>
+• Basic Splash screen and Loading animation </br>
 • Some other logic behind
 
 ## TODO:
